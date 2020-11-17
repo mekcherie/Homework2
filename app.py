@@ -91,16 +91,16 @@ def calculator():
     """Shows the user a form to enter 2 numbers and an operation."""
     return """
     <form action = "/calculator_results" method = "GET" >
-        Please enter 2 numbers and select an operator. < br/> < br/>
+        Please enter 2 numbers and select an operator. <br/> <br/>
         <input type = "number" name = "operand1" >
         <select name = "operation" >
-            <option value = "add" > + < /option >
-            <option value = "subtract" > - < /option >
-            <option value = "multiply" > * < /option >
-            <option value = "divide" > / < /option >
+            <option value = "add"> + </option>
+            <option value = "subtract"> - </option>
+            <option value = "multiply"> * </option>
+            <option value = "divide"> / </option>
         </select >
-        <input type = "number" name = "operand2" >
-        <input type = "submit" value = "Submit!" >
+        <input type = "number" name = "operand2">
+        <input type = "submit" value = "Submit!">
     </form >
     """
 
@@ -108,11 +108,27 @@ def calculator():
 @app.route('/calculator_results')
 def calculator_results():
     """Shows the user the result of their calculation."""
-    user_calculator1 = int(request.args.get("operand1"))
-    user_calculator2 = int(request.args.get("operand2"))
-    user_results = int(request.args.get("operand2"))
+    num_1 = int(request.args.get("operand1"))
+    num_2 = int(request.args.get("operand2"))
+   
 
-    return f"You're chosse to add {user_calculator1} and {user_calculator2}.Your results is { user_results }"
+    operation= request.args.get("operation")
+    print(operation)
+
+    if operation == "add":
+        result = num_1 + num_2 
+
+    if operation == "subtract":
+        result = num_1 - num_2
+
+    if operation == "multiply":
+        result = num_1 * num_2
+
+    if operation == "divide":
+        result = num_1 / num_2
+
+    return f"You're chosse to add {num_1} and {num_2}.Your results is {result}"
+
 
 
 # List of compliments to be used in the `compliments_results` route (feel free
