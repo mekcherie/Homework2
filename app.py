@@ -28,7 +28,7 @@ def choose_froyo():
         <input type="submit" value="Submit!">
     </form>
     """
-
+    return render_template("froyo_form.html")
 
 @app.route('/froyo_results')
 def show_froyo_results():
@@ -36,32 +36,34 @@ def show_froyo_results():
     users_froyo_toppings = request.args.get('toppings')
     return f'You ordered {users_froyo_flavor} with {users_froyo_toppings} Fro-Yo!'
 
+    context = {
+        "users_froyo_flavor" : request.args.get('flavor'),
+        "users_froyo_topping" : request.args.get('toppings')
+    }
+    return render_template("froyo_results.html", **context)
 
 @app.route('/favorites')
 def favorites():
     """Shows the user a form to choose their favorite color, animal, and city."""
     return """
-    <form action="/favorite_results" method="GET">
+    <form action="/favorites_results" method="GET">
         What is your favorite color? <br/>
-        <input type="textbox" name="color"><br/>
-        What is youre favorite animal?
-        <input type="text" name="animal">
-        What is youre favorite city?
-        <input type="text" name="city">
+        <input type="text" name="color"><br/>
+        What is your favorite animal? <br/>                            
+        <input type="text" name="animal"><br/>
+        What is your favorite city? <br/>
+        <input type="text" name="city""><br/>
         <input type="submit" value="Submit!">
     </form>
     """
 
-
 @app.route('/favorites_results')
 def favorites_results():
     """Shows the user a nice message using their form results."""
-
-    users_favorites_color = request.args.get('color')
-    users_favorites_animal = request.args.get('animal')
-    users_favorites_city = request.args.get('city')
-    return f'Wow, I didnt know {users_favorites_color} {users_favorites_animal} lived in {users_favorites_city}!'
-
+    users_fav_color = request.args.get('color')
+    users_fav_animal = request.args.get('animal')
+    users_fav_city = request.args.get('city')
+    return f'Wow, it/s amazing that {users_fav_color} {users_fav_animal} lives in {users_fav_city}!'
 
 @app.route('/secret_message')
 def secret_message():
@@ -69,7 +71,7 @@ def secret_message():
     the POST method to keep it a secret!"""
     return """
     <form action="/message_results" method="POST">
-    What's your main secret ? <br/>
+    Any thing that you need to make it a secret<br/>
     <input type="text" name="message">
     <br/>  <br/>
     <input type="submit" value="Submit">
@@ -81,9 +83,9 @@ def secret_message():
 def message_results():
     """Shows the user their message, with the letters in sorted order."""
     users_secret_message = request.form.get('message')
-    sorted_message = sort_letters(users_secret_message)
+    secret_message = sort_letters(users_secret_message)
 
-    return f"this is your {sorted_message}!"
+    return f"this is your {secret_message}!"
 
 
 @app.route('/calculator')
@@ -103,32 +105,35 @@ def calculator():
         <input type = "submit" value = "Submit!">
     </form >
     """
-
+    return render_template("calculator_form.html")
 
 @app.route('/calculator_results')
 def calculator_results():
     """Shows the user the result of their calculation."""
-    num_1 = int(request.args.get("operand1"))
-    num_2 = int(request.args.get("operand2"))
-   
-
-    operation= request.args.get("operation")
-    print(operation)
-
-    if operation == "add":
-        result = num_1 + num_2 
-
-    if operation == "subtract":
-        result = num_1 - num_2
-
-    if operation == "multiply":
-        result = num_1 * num_2
-
-    if operation == "divide":
-        result = num_1 / num_2
-
-    return f"You're chosse to add {num_1} and {num_2}.Your results is {result}"
-
+    user_operand1 = request.args.get("operand1")
+    user_operand2 = request.args.get("operand2")
+    user_operation = request.args.get("operation")
+    
+    if user_operation == "add":
+        result = int(user_operand1) + int(user_operand2)
+        chosen_operation = "add"
+    elif user_operation == "subtract":
+        result = int(user_operand1) - int(user_operand2)
+        chosen_operation = "subtract"
+    elif user_operation == "multiply":
+        result = int(user_operand1) * int(user_operand2)
+        chosen_operation = "multiply"
+    elif user_operation == "divide":
+        result = int(user_operand1) / int(user_operand2)
+        chosen_operation = "divide"
+    
+    context = {
+        "num1" : user_operand1,
+        "num2" : user_operand2,
+        "result" : result,
+        "operation" : chosen_operation
+    }
+    return render_template("calculator_results.html", **context)
 
 
 # List of compliments to be used in the `compliments_results` route (feel free
@@ -164,18 +169,17 @@ list_of_compliments = [
 @app.route('/compliments')
 def compliments():
     """Shows the user a form to get compliments."""
-    return render_template('compliments_form.html')
+    pass
+    # return render_template('compliments_form.html')
 
 
 @app.route('/compliments_results')
 def compliments_results():
     """Show the user some compliments."""
-    context = {
-        # TODO: Enter your context variables here.
-    }
+    pass
 
-    return render_template('compliments_results.html', **context)
+    # return render_template('compliments_results.html', **context)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
